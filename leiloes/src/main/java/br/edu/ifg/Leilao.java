@@ -106,6 +106,18 @@ public class Leilao {
         return false;
     }
 
+    public void propoeVoid(Lance lance){
+        if(!ehValido(lance)) {
+            throw new RuntimeException("Lance deve ser maior que zero");
+        }
+
+        if (this.estaSemLances() || ehUmLanceValido(lance)) {
+            adicionarLance(lance);
+        }else {
+            throw new RuntimeException("Erro inesperado");
+        }
+    }
+
     private boolean ehValido(Lance lance) {
         return lance.getValor().compareTo(BigDecimal.ZERO) > 0;
     }
