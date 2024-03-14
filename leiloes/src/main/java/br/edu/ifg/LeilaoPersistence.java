@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Realiza operações de persistência de leiloes
  */
-public class LeilaoPersistence implements IPersistence{
+public class LeilaoPersistence{
 
     private List<Leilao> tabelaDeLeiloes = new ArrayList<>();
 

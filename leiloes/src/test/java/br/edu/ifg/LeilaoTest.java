@@ -95,10 +95,29 @@ public class LeilaoTest {
 
     @Test
     public void deveRegistrarUmLeilaoNoBancoDeDados(){
-        //LeilaoPersistenceFake leilaoPersistenceFake = new LeilaoPersistenceFake();
         LeilaoPersistence mock = Mockito.mock(LeilaoPersistence.class);
         LeilaoService subject = new LeilaoService(mock);
         Leilao leilao = new Leilao("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
         subject.cadatraNovoLeilao(leilao);
+    }
+
+    @Test
+    public void naoDeveRegistrarUmLeilao_Quando_NomeVazio(){
+        LeilaoPersistence mock = Mockito.mock(LeilaoPersistence.class);
+        LeilaoService subject = new LeilaoService(mock);
+        Leilao leilao = new Leilao("", BigDecimal.valueOf(1000), LocalDate.now());
+
+        assertThrows(RuntimeException.class,
+                ()->subject.cadatraNovoLeilao(leilao));
+    }
+
+    @Test
+    public void naoDeveRegistrarUmLeilao_Quando_NomeNull(){
+        LeilaoPersistence mock = Mockito.mock(LeilaoPersistence.class);
+        LeilaoService subject = new LeilaoService(mock);
+        Leilao leilao = new Leilao(null, BigDecimal.valueOf(1000), LocalDate.now());
+
+        assertThrows(RuntimeException.class,
+                ()->subject.cadatraNovoLeilao(leilao));
     }
 }

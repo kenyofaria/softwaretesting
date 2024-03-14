@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 public class LeilaoService {
 
-    private final IPersistence persistence;
+    private final LeilaoPersistence persistence;
 
-    public LeilaoService(IPersistence persistence) {
+    public LeilaoService(LeilaoPersistence persistence) {
         this.persistence = persistence;
     }
 
@@ -19,4 +19,6 @@ public class LeilaoService {
         }
         persistence.insere(leilao);
     }
+
+
 }
