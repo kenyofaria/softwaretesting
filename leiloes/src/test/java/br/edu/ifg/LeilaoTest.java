@@ -1,6 +1,7 @@
 package br.edu.ifg;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -88,5 +89,16 @@ public class LeilaoTest {
         leilao.propoeVoid(lanceKenyo);
         assertThrows(RuntimeException.class,
                 ()->leilao.propoeVoid(lanceAristeu));
+    }
+
+    //------------------------ aprendendo sobre mocks -------------------------------------------
+
+    @Test
+    public void deveRegistrarUmLeilaoNoBancoDeDados(){
+        //LeilaoPersistenceFake leilaoPersistenceFake = new LeilaoPersistenceFake();
+        LeilaoPersistence mock = Mockito.mock(LeilaoPersistence.class);
+        LeilaoService subject = new LeilaoService(mock);
+        Leilao leilao = new Leilao("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
+        subject.cadatraNovoLeilao(leilao);
     }
 }
