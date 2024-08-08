@@ -103,6 +103,7 @@ public class Leilao {
             adicionarLance(lance);
             return true;
         }
+
         return false;
     }
 

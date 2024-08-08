@@ -10,7 +10,7 @@ public class LeilaoService {
         this.persistence = persistence;
     }
 
-    public void cadatraNovoLeilao(Leilao leilao){
+    public void cadastraNovoLeilao(Leilao leilao){
         if(leilao.getNome() == null || leilao.getNome().isEmpty()){
             throw new RuntimeException("É necessário informar o nome do leilão");
         }
@@ -18,6 +18,13 @@ public class LeilaoService {
             throw new RuntimeException("É necessário ter um valor maior que zero para o leilão");
         }
         persistence.insere(leilao);
+    }
+
+    public void atualizaLeilao(Leilao leilao){
+        if(this.persistence.listagem() == null || this.persistence.listagem().isEmpty()){
+            return;
+        }
+        persistence.atualiza(leilao);
     }
 
 

@@ -6,9 +6,15 @@ import org.mockito.Mockito;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 public class LeilaoIT {
 
@@ -55,7 +61,26 @@ public class LeilaoIT {
         LeilaoPersistence mock = Mockito.mock(LeilaoPersistence.class);
         LeilaoService subject = new LeilaoService(mock);
         Leilao leilao = new Leilao("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
-        subject.cadatraNovoLeilao(leilao);
+        subject.cadastraNovoLeilao(leilao);
+    }
+    @Test
+    public void naoDeveAtualizarUmLeilao_Quando_NaoExistemLeiloes(){
+        LeilaoPersistence mock = Mockito.mock(LeilaoPersistence.class);
+        when(mock.listagem()).thenReturn(null);
+        LeilaoService subject = new LeilaoService(mock);
+        Leilao leilao = new Leilao("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
+        subject.atualizaLeilao(leilao);
+        verify(mock, never()).atualiza(any());
+    }
+
+    @Test
+    public void naoDeveAtualizarUmLeilao_Quando_NaoExistemLeiloesXYZ(){
+        LeilaoPersistence mock = Mockito.mock(LeilaoPersistence.class);
+        when(mock.listagem()).thenReturn(Collections.emptyList());
+        LeilaoService subject = new LeilaoService(mock);
+        Leilao leilao = new Leilao("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
+        subject.atualizaLeilao(leilao);
+        verify(mock, never()).atualiza(any());
     }
 
     @Test
@@ -65,7 +90,7 @@ public class LeilaoIT {
         Leilao leilao = new Leilao("", BigDecimal.valueOf(1000), LocalDate.now());
 
         assertThrows(RuntimeException.class,
-                ()->subject.cadatraNovoLeilao(leilao));
+                ()->subject.cadastraNovoLeilao(leilao));
     }
 
     @Test
@@ -75,6 +100,6 @@ public class LeilaoIT {
         Leilao leilao = new Leilao(null, BigDecimal.valueOf(1000), LocalDate.now());
 
         assertThrows(RuntimeException.class,
-                ()->subject.cadatraNovoLeilao(leilao));
+                ()->subject.cadastraNovoLeilao(leilao));
     }
 }
