@@ -26,6 +26,5 @@ replay_pid*
 leiloes/.DS_Store
 leiloes/.idea/
 leiloes/target/
-ui-testing/pom.xml
-ui-testing/src/main/
+ui-testing/.idea/
 ui-testing/target/
