@@ -3,21 +3,21 @@ package br.edu.ifg;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class Lance {
-    private Usuario usuario;
+public class Bid {
+    private User usuario;
     private BigDecimal valor;
     private LocalDateTime dataHora;
 
-    public Lance() {
+    public Bid() {
     }
 
-    public Lance(Usuario usuario, BigDecimal valor, LocalDateTime dataHora) {
+    public Bid(User usuario, BigDecimal valor, LocalDateTime dataHora) {
         this.usuario = usuario;
         this.valor = valor;
         this.dataHora = dataHora;
     }
 
-    public Usuario getUsuario() {
+    public User getUsuario() {
         return usuario;
     }
 
