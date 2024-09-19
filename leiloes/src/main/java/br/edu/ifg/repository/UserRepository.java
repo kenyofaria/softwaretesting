@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class performs user persistence operations.
@@ -28,7 +30,10 @@ public class UserRepository {
             this.ps.setString(1, user.getName());
             this.ps.setString(2, user.getLogin());
             this.ps.setString(3, user.getPass());
-            int generatedId = this.ps.executeUpdate();
+            this.ps.executeUpdate();
+            ResultSet rs = this.ps.getGeneratedKeys();
+            rs.next();
+            int generatedId = rs.getInt(1);
             return new User((long) generatedId, user.getName(), user.getLogin(), user.getPass());
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -37,20 +42,46 @@ public class UserRepository {
 
     public User fetch(@Nonnull Long id) {
         try {
-            this.ps = connection.prepareStatement("SELECT * FROM usuarios WHERE id = ?");
+            this.ps = connection.prepareStatement("SELECT id, nome, login, senha FROM usuarios WHERE id = ?");
             this.ps.setLong(1, id);
             ResultSet resultSet = this.ps.executeQuery();
-            if (resultSet == null){
-                return null;
-            }
-            while(resultSet.next()) {
+            User found = null;
+            while (resultSet.next()) {
                 long usuarioId = resultSet.getLong("id");
                 String nome = resultSet.getString("nome");
                 String login = resultSet.getString("login");
                 String senha = resultSet.getString("senha");
-                return new User(usuarioId, nome, login, senha);
+                found = new User(usuarioId, nome, login, senha);
             }
-            return null;
+            return found;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete(Long id) {
+        try {
+            this.ps = connection.prepareStatement("DELETE FROM usuarios WHERE id = ?");
+            this.ps.setLong(1, id);
+            this.ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<User> list() {
+        final List<User> existingUsers = new ArrayList<>();
+        try {
+            this.ps = connection.prepareStatement("SELECT id, nome, login, senha FROM usuarios");
+            ResultSet resultSet = this.ps.executeQuery();
+            while (resultSet.next()) {
+                long usuarioId = resultSet.getLong("id");
+                String nome = resultSet.getString("nome");
+                String login = resultSet.getString("login");
+                String senha = resultSet.getString("senha");
+                existingUsers.add(new User(usuarioId, nome, login, senha));
+            }
+            return existingUsers;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

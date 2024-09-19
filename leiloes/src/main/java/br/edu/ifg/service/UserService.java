@@ -4,6 +4,7 @@ import br.edu.ifg.User;
 import br.edu.ifg.repository.UserRepository;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 
 /**
  * This class provides a bunch of services about users.
@@ -30,5 +31,13 @@ public class UserService {
 
     public User get(@Nonnull Long id) {
         return repository.fetch(id);
+    }
+
+    public void delete(@Nonnull Long id) {
+        repository.delete(id);
+    }
+
+    public List<User> list() {
+        return repository.list();
     }
 }
