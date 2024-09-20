@@ -4,7 +4,9 @@ import br.edu.ifg.User;
 import br.edu.ifg.repository.UserRepository;
 
 import javax.annotation.Nonnull;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class provides a bunch of services about users.
@@ -37,7 +39,25 @@ public class UserService {
         repository.delete(id);
     }
 
+    /**
+     *
+     * @return a list of {@link User} in a custom ordering
+     */
+    public List<User> list(@Nonnull Sort sort) {
+        if(sort == Sort.ASC) {
+            return repository.list().stream()
+                    .sorted(Comparator.comparing(User::getName)).collect(Collectors.toList());
+        } else {
+            return repository.list().stream()
+                    .sorted(Comparator.comparing(User::getName).reversed()).collect(Collectors.toList());
+        }
+    }
+
+    /**
+     *
+     * @return a ordered list of {@link User}
+     */
     public List<User> list() {
-        return repository.list();
+        return this.list(Sort.ASC);
     }
 }

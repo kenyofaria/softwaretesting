@@ -10,28 +10,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AuctionTest {
     @Test
-    public void deveRegistrarUmLanceQuandoLeilaoTemUmLance(){
-        Auction leilao = new Auction("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
-        User usuario = new User(1L, "Kenyo", "muito forte", "kenyofaria@gmail.com");
-        Bid lance = new Bid(usuario, BigDecimal.valueOf(1001), LocalDateTime.now());
-        assertDoesNotThrow(() -> leilao.place(lance));
+    public void shouldBidAtAuction() {
+        Auction auction = new Auction("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
+        User user = new User(1L, "Kenyo", "kenyofaria@gmail.com", "very strong");
+        Bid lance = new Bid(user, BigDecimal.valueOf(1001), LocalDateTime.now());
+        assertDoesNotThrow(() -> auction.place(lance));
     }
     @Test
-    public void deveRegistrarUmLanceQuandoLeilaoTemMaisDeUmLance(){
-        Auction leilao = new Auction("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
-        User kenyo = new User(1L, "Kenyo", "muito forte", "kenyofaria@gmail.com");
-        User aristeu = new User(2L, "Aristeu", "muito forte", "aristeupatrao@gmail.com");
-        Bid lanceKenyo = new Bid(kenyo, BigDecimal.valueOf(1001), LocalDateTime.now());
-        Bid lanceAristeu = new Bid(aristeu, BigDecimal.valueOf(1002), LocalDateTime.now());
-        assertDoesNotThrow(() -> leilao.place(lanceKenyo));
-        assertDoesNotThrow(() -> leilao.place(lanceAristeu));
+    public void shouldBidWhenAuctionHasMoreThanOneBid(){
+        Auction auction = new Auction("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
+        User kenyo = new User(1L, "Kenyo", "kenyofaria@gmail.com", "strong");
+        User aristeu = new User(2L, "Aristeu", "aristeupatrao@gmail.com", "strong");
+        Bid kenyoBid = new Bid(kenyo, BigDecimal.valueOf(1001), LocalDateTime.now());
+        Bid aristeuBid = new Bid(aristeu, BigDecimal.valueOf(1002), LocalDateTime.now());
+        assertDoesNotThrow(() -> auction.place(kenyoBid));
+        assertDoesNotThrow(() -> auction.place(aristeuBid));
     }
     @Test
-    public void naoDeveRegistrarUmLanceQuandoValorForZero(){
-        Auction leilao = new Auction("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
-        User usuario = new User(1L, "Kenyo", "muito forte", "kenyofaria@gmail.com");
-        Bid lance = new Bid(usuario, BigDecimal.valueOf(0), LocalDateTime.now());
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> leilao.place(lance));
+    public void shouldNotBidWhenInvalidValue(){
+        Auction auction = new Auction("PS 5", BigDecimal.valueOf(1000), LocalDate.now());
+        User user = new User(1L, "Kenyo", "kenyofaria@gmail.com", "strong");
+        Bid bid = new Bid(user, BigDecimal.ZERO, LocalDateTime.now());
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> auction.place(bid));
         assertTrue(ex.getMessage().contains("Bid value needs to be greater than zero"));
     }
 

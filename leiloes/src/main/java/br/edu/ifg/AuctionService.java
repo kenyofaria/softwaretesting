@@ -20,8 +20,12 @@ public class AuctionService {
         if(auction.getName() == null || auction.getName().isEmpty()){
             throw new RuntimeException("Auction name is mandatory");
         }
-        if(auction.getInitialValue() == null || auction.getInitialValue().equals(BigDecimal.ZERO) || auction.getInitialValue().compareTo(BigDecimal.ZERO) < 0){
+        if(auction.getInitialValue() == null || auction.getInitialValue().compareTo(BigDecimal.ZERO) <= 0) {
             throw new RuntimeException("Initial value needs to be higher than zero");
+        }
+
+        if (auction.getUser() == null) {
+            throw new RuntimeException("User not found");
         }
         persistence.save(auction);
     }
